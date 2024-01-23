@@ -33,9 +33,9 @@ Number calculatePostfix(char* postfix) {
             if(operator == '+'){
                 newnumber = add(n1, n2);
             }
-            // else if(operator == '-'){
-            //     newnumber = subtract(n1, n2);
-            // }
+            else if(operator == '-'){
+                newnumber = subtract(n1, n2);
+            }
             // else if(operator == '*'){
             //     newnumber = multiply(n1, n2);
             // }

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 int main(){
-    char* string = "922337203685477580845 + 9223372036854770058086425\0";
+    char* string = "528452548184184 + 89848187861181628716 -894268979676971 +8461887118761 -782987961";
     char* ans = infixToPostfix(string);
 
     Number answer;
