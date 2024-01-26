@@ -4,7 +4,7 @@
 
 int main(){
     // char* string = "45 + 54 - 689 * 18 / 3745";
-    char* string = "45 + 54 + 3745";
+    char* string = "22.45 + 45.56";
     char* ans = infixToPostfix(string);
 
     for(int i = 0; ans[i] != '\0'; i++){

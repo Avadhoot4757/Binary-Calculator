@@ -17,9 +17,18 @@ Number calculatePostfix(char* postfix) {
             Number n;
             initNumber(&n);
             while(postfix[i] != ' ' && postfix[i] != '\0'){
-                int data = postfix[i] - '0';
-                append(&n, data);
-                i++;
+                if(postfix[i] == '.'){
+                    i++;
+                    int data = postfix[i] - '0';
+                    append(&n, data);
+                    n.decimal = n.tail;
+                    i++;
+                }
+                else{
+                    int data = postfix[i] - '0';
+                    append(&n, data);
+                    i++;
+                }
             }
             pushSol(&s, n);
             i++;

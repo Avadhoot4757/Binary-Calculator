@@ -38,7 +38,7 @@ char* infixToPostfix(char* infix) {
             continue;
         }
         else if (isalnum(currentChar)) {
-            while (isalnum(infix[i])) {
+            while (isalnum(infix[i]) || infix[i]=='.') {
                 postfix[postfixIndex++] = infix[i++];
             }
             postfix[postfixIndex++] = ' ';  // Add space as a separator

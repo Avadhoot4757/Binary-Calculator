@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "numberDLL.h"
+#include <limits.h>
 
 void initDllNode(DllNode* m, int data){
     m->data = data;
@@ -11,9 +12,23 @@ void initDllNode(DllNode* m, int data){
 void initNumber(Number* n){
     n->length = 0;
     n->head = NULL;
+    n->decimal = NULL;
     n->tail = NULL;
 
     return;
+}
+
+int findLength(DllNode* n1, DllNode* n2){
+    if(n1 == NULL || n2 == NULL){
+        return 0;
+    }
+    int count = 1;
+    while(n1 != n2){
+        count++;
+        n1 = n1->next;
+    }
+
+    return count;
 }
 
 void append(Number* n, int data){
@@ -61,6 +76,7 @@ void removeFromBeginning(Number* n){
 
     DllNode* temp = n->head;
     n->head = n->head->next;
+    n->length--;
     free(temp);
 }
 
@@ -75,46 +91,275 @@ void freeNumber(Number* n) {
 }
 
 
+// Number add(Number n1, Number n2) {
+//     Number answer;
+//     initNumber(&answer);
+
+//     int sum, carry = 0;
+//     DllNode* t1 = n1.tail;
+//     DllNode* t2 = n2.tail;
+//     DllNode* d1 = n1.decimal;
+//     DllNode* d2 = n2.decimal;
+//     DllNode* h1 = n1.head;
+//     DllNode* h2 = n2.head;
+    
+//     if(d1 == NULL && d2 == NULL){
+//         while (t1 != NULL && t2 != NULL) {
+//             int temp = t1->data + t2->data + carry;
+//             sum = temp % 10;
+//             carry = temp / 10;
+
+//             insertAtBeginning(&answer, sum);
+//             t1 = t1->prev;
+//             t2 = t2->prev;
+//         }
+
+//         while (t1 != NULL) {
+//             int temp = t1->data + carry;
+//             sum = temp % 10;
+//             carry = temp / 10;
+//             insertAtBeginning(&answer, sum);
+//             t1 = t1->prev;
+//         }
+
+//         while (t2 != NULL) {
+//             int temp = t2->data + carry;
+//             sum = temp % 10;
+//             carry = temp / 10;
+//             insertAtBeginning(&answer, sum);
+//             t2 = t2->prev;
+//         }
+
+//         // If there is a final carry, add it as a new digit
+//         if (carry > 0) {
+//             insertAtBeginning(&answer, carry);
+//         }
+
+//         return answer;
+//     }
+//     else if(d1 == NULL && d2 != NULL){
+//         while(t2 != d2->prev){
+//             int temp = t2->data + carry;
+//             sum = temp % 10;
+//             carry = temp / 10;
+
+//             insertAtBeginning(&answer, sum);
+//             t2 = t2->prev;
+//         }
+//         answer.decimal = answer.head;
+
+//         while (t1 != NULL && t2 != NULL) {
+//             int temp = t1->data + t2->data + carry;
+//             sum = temp % 10;
+//             carry = temp / 10;
+
+//             insertAtBeginning(&answer, sum);
+//             t1 = t1->prev;
+//             t2 = t2->prev;
+//         }
+
+//         while (t1 != NULL) {
+//             int temp = t1->data + carry;
+//             sum = temp % 10;
+//             carry = temp / 10;
+//             insertAtBeginning(&answer, sum);
+//             t1 = t1->prev;
+//         }
+
+//         while (t2 != NULL) {
+//             int temp = t2->data + carry;
+//             sum = temp % 10;
+//             carry = temp / 10;
+//             insertAtBeginning(&answer, sum);
+//             t2 = t2->prev;
+//         }
+
+//         // If there is a final carry, add it as a new digit
+//         if (carry > 0) {
+//             insertAtBeginning(&answer, carry);
+//         }
+
+//         return answer;
+//     }
+//     else if(d1 != NULL && d2 == NULL){
+//         return add(n2, n1);
+//     }
+//     else{
+//         int l1 = findLength(n1.decimal, n1.tail);
+//         int l2 = findLength(n2.decimal, n2.tail);
+//         if(l1 == l2){
+//             while (t1 != NULL && t2 != NULL) {
+//                 int temp = t1->data + t2->data + carry;
+//                 sum = temp % 10;
+//                 carry = temp / 10;
+
+//                 insertAtBeginning(&answer, sum);
+//                 if(t1 == d1){
+//                     answer.decimal = answer.head;
+//                 }
+//                 t1 = t1->prev;
+//                 t2 = t2->prev;
+//             }
+
+//             while (t1 != NULL) {
+//                 int temp = t1->data + carry;
+//                 sum = temp % 10;
+//                 carry = temp / 10;
+//                 insertAtBeginning(&answer, sum);
+//                 t1 = t1->prev;
+//             }
+
+//             while (t2 != NULL) {
+//                 int temp = t2->data + carry;
+//                 sum = temp % 10;
+//                 carry = temp / 10;
+//                 insertAtBeginning(&answer, sum);
+//                 t2 = t2->prev;
+//             }
+
+//             // If there is a final carry, add it as a new digit
+//             if (carry > 0) {
+//                 insertAtBeginning(&answer, carry);
+//             }
+
+//             return answer;
+//         }
+//         else if(l1>l2){
+//             while(l1>l2){
+//                 int temp = t1->data + carry;
+//                 sum = temp % 10;
+//                 carry = temp / 10;
+//                 insertAtBeginning(&answer, sum);
+//                 t1 = t1->prev;
+//                 l1--;
+//             }
+//             while (t1 != NULL && t2 != NULL) {
+//                 int temp = t1->data + t2->data + carry;
+//                 sum = temp % 10;
+//                 carry = temp / 10;
+
+//                 insertAtBeginning(&answer, sum);
+//                 if(t1 == d1){
+//                     answer.decimal = answer.head;
+//                 }
+//                 t1 = t1->prev;
+//                 t2 = t2->prev;
+//             }
+
+//             while (t1 != NULL) {
+//                 int temp = t1->data + carry;
+//                 sum = temp % 10;
+//                 carry = temp / 10;
+//                 insertAtBeginning(&answer, sum);
+//                 t1 = t1->prev;
+//             }
+
+//             while (t2 != NULL) {
+//                 int temp = t2->data + carry;
+//                 sum = temp % 10;
+//                 carry = temp / 10;
+//                 insertAtBeginning(&answer, sum);
+//                 t2 = t2->prev;
+//             }
+
+//             // If there is a final carry, add it as a new digit
+//             if (carry > 0) {
+//                 insertAtBeginning(&answer, carry);
+//             }
+
+//             return answer;
+//         }
+//         else{
+//             return add(n2, n1);
+//         }
+//     }
+    
+// }
+
 Number add(Number n1, Number n2) {
     Number answer;
     initNumber(&answer);
 
     int sum, carry = 0;
-    DllNode* p1 = n1.tail;
-    DllNode* p2 = n2.tail;
+    DllNode *t1 = n1.tail;
+    DllNode *t2 = n2.tail;
+    DllNode *d1 = n1.decimal;
+    DllNode *d2 = n2.decimal;
 
-    while (p1 != NULL && p2 != NULL) {
-        int temp = p1->data + p2->data + carry;
-        sum = temp % 10;
-        carry = temp / 10;
+    if (d1 == NULL && d2 == NULL) {
+        addIntegers(&answer, &t1, &t2, &carry, NULL);
+    } else if (d1 == NULL && d2 != NULL) {
+        addTrailingDigits(&answer, &t2, &carry, findLength(d2, n2.tail));
+        answer.decimal = answer.head;
+        addIntegers(&answer, &t1, &t2, &carry, NULL);
+    } else if (d1 != NULL && d2 == NULL) {
+        return add(n2, n1);
+    } else {
+        int l1 = findLength(n1.decimal, n1.tail);
+        int l2 = findLength(n2.decimal, n2.tail);
 
-        insertAtBeginning(&answer, sum);
-        p1 = p1->prev;
-        p2 = p2->prev;
+        if (l1 == l2) {
+            addIntegers(&answer, &t1, &t2, &carry, d1);
+        } else if (l1 > l2) {
+            addTrailingDigits(&answer, &t1, &carry, l1 - l2);
+            addIntegers(&answer, &t1, &t2, &carry, d1);
+        } else {
+            return add(n2, n1);  // Swap for easier handling
+        }
     }
 
-    while (p1 != NULL) {
-        int temp = p1->data + carry;
-        sum = temp % 10;
-        carry = temp / 10;
-        insertAtBeginning(&answer, sum);
-        p1 = p1->prev;
-    }
-
-    while (p2 != NULL) {
-        int temp = p2->data + carry;
-        sum = temp % 10;
-        carry = temp / 10;
-        insertAtBeginning(&answer, sum);
-        p2 = p2->prev;
-    }
-
-    // If there is a final carry, add it as a new digit
+    // Add final carry if exists
     if (carry > 0) {
         insertAtBeginning(&answer, carry);
     }
 
     return answer;
+}
+
+// Function to add integer parts of numbers
+void addIntegers(Number *answer, DllNode **t1, DllNode **t2, int *carry, DllNode *d) {
+    int sum;
+    while (*t1 != NULL && *t2 != NULL) {
+        int temp = (*t1)->data + (*t2)->data + *carry;
+        sum = temp % 10;
+        *carry = temp / 10;
+        insertAtBeginning(answer, sum);
+        if(*t1 == d){
+            answer->decimal = answer->head;
+        }
+        *t1 = (*t1)->prev;
+        *t2 = (*t2)->prev;
+    }
+
+    // Use addTrailingDigits to handle remaining digits
+    addTrailingDigits(answer, t1, carry, INT_MAX);  // Add all remaining digits from t1
+    addTrailingDigits(answer, t2, carry, INT_MAX);  // Add all remaining digits from t2
+}
+
+
+// Function to add trailing digits after the decimal point
+void addDecimalTrailingDigits(Number *answer, DllNode **t, int *carry) {
+    int sum;
+    while (*t != NULL) {
+        int temp = (*t)->data + *carry;
+        sum = temp % 10;
+        *carry = temp / 10;
+        insertAtBeginning(answer, sum);
+        *t = (*t)->prev;
+    }
+}
+
+//Function to add 
+void addTrailingDigits(Number *answer, DllNode **t, int *carry, int count) {
+    int sum;
+    while (*t != NULL && count > 0) {
+        int temp = (*t)->data + *carry;
+        sum = temp % 10;
+        *carry = temp / 10;
+        insertAtBeginning(answer, sum);
+        *t = (*t)->prev;
+        count--;
+    }
 }
 
 
@@ -156,6 +401,9 @@ Number subtract(Number n1, Number n2){
 void displayNumber(Number n){
     DllNode* temp = n.head;
     while(temp != NULL){
+        if(temp == n.decimal){
+            printf(".");
+        }
         printf("%d", temp->data);
         temp = temp->next;
     }

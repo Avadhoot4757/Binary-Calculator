@@ -16,7 +16,7 @@ int main() {
     // printf("Enter a postfix expression: ");
     // scanf("%s", postfixExpression);
 
-    char* postfixExpression = "45 54 + 3745 +";
+    char* postfixExpression = "22.45 45.56 +";
 
     Number result = calculatePostfix(postfixExpression);
 
