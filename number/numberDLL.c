@@ -362,41 +362,132 @@ void addTrailingDigits(Number *answer, DllNode **t, int *carry, int count) {
     }
 }
 
+void paddingZeroes(Number* n, int count){
+    while(count != 0){
+        append(n, 0);
+        count--;
+    }
+}
 
-//assuming that n1 is always greater than n2
-Number subtract(Number n1, Number n2){
+// void subtractIntegers(Number* answer, DllNode** t1, DllNode** t2, DllNode* d){
+//     int diff, borrow = 0;
+//     while(*t1 != NULL && *t2 != NULL){
+//         if((*t1)->data >= (*t2)->data){
+//             diff = (*t1)->data - (*t2)->data;
+//             insertAtBeginning(answer, diff);
+//             if(*t1 == d){
+//                 answer->decimal = answer->head;
+//             }
+//             *t1 = (*t1)->prev;
+//             *t2 = (*t2)->prev;
+//         }
+//         else if((*t1)->data < (*t2)->data){
+//             diff = (*t1)->data + 10 - (*t2)->data;
+//             insertAtBeginning(answer, diff);
+//             if(*t1 == d){
+//                 answer->decimal = answer->head;
+//             }
+//             *t1 = (*t1)->prev;
+//             *t2 = (*t2)->prev;
+//             (*t1)->data--;
+//         }
+//     }
+//     while((*t1) != NULL){
+//         insertAtBeginning(answer, (*t1)->data);
+//         *t1 = (*t1)->prev;
+//     }
+
+//     if(answer->head->data == 0){
+//         removeFromBeginning(answer);
+//     }
+// }
+
+// //assuming that n1 is always greater than n2
+// Number subtract(Number n1, Number n2){
+//     Number answer;
+//     initNumber(&answer);
+
+//     int diff, borrow = 0;
+//     DllNode* t1 = n1.tail;
+//     DllNode* t2 = n2.tail;
+//     DllNode* d1 = n1.decimal;
+//     DllNode* d2 = n2.decimal;
+
+//     if(d1 == NULL && d2 == NULL){
+//         subtractIntegers(&answer, &t1, &t2, NULL);
+//     }
+//     else{
+//         int l1 = findLength(n1.decimal, n1.tail);
+//         int l2 = findLength(n2.decimal, n2.tail);
+        
+//         if(l1 == l2){
+//             subtractIntegers(&answer, &t1, &t2, d1);
+//         }
+//         else if(l1 > l2){
+//             paddingZeroes(&n2, l1-l2);
+//             subtractIntegers(&answer, &t1, &t2, d1);
+//         }
+//         else if(l2 > l1){
+//             paddingZeroes(&n1, l2-l1);
+//             subtractIntegers(&answer, &t1, &t2, d1);
+//         }
+//     }
+    
+//     return answer;
+// }
+
+void subtractIntegers(Number* answer, DllNode** t1, DllNode** t2, DllNode* d) {
+    int diff;
+    while (*t1 != NULL && *t2 != NULL) {
+        if ((*t1)->data >= (*t2)->data) {
+            diff = (*t1)->data - (*t2)->data;
+            insertAtBeginning(answer, diff);
+            if(*t1 == d){
+                answer->decimal = answer->head;
+            }
+            *t1 = (*t1)->prev;
+            *t2 = (*t2)->prev;
+        } else {
+            diff = (*t1)->data + 10 - (*t2)->data;
+            insertAtBeginning(answer, diff);
+            if(*t1 == d){
+                answer->decimal = answer->head;
+            }
+            *t1 = (*t1)->prev;
+            *t2 = (*t2)->prev;
+            (*t1)->data--;
+        }
+    }
+
+    while ((*t1) != NULL) {
+        insertAtBeginning(answer, (*t1)->data);
+        *t1 = (*t1)->prev;
+    }
+}
+
+Number subtract(Number n1, Number n2) {
     Number answer;
     initNumber(&answer);
 
-    int diff, borrow = 0;
-    DllNode* p1 = n1.tail;
-    DllNode* p2 = n2.tail;
+    int l1 = findLength(n1.decimal, n1.tail);
+    int l2 = findLength(n2.decimal, n2.tail);
 
-    while(p1 != NULL && p2 != NULL){
-        if(p1->data >= p2->data){
-            diff = p1->data - p2->data;
-            insertAtBeginning(&answer, diff);
-            p1 = p1->prev;
-            p2 = p2->prev;
-        }
-        else if(p1->data < p2->data){
-            diff = p1->data + 10 - p2->data;
-            insertAtBeginning(&answer, diff);
-            p1 = p1->prev;
-            p2 = p2->prev;
-            p1->data--;
-        }
-    }
-    while(p1 != NULL){
-        insertAtBeginning(&answer, p1->data);
-        p1 = p1->prev;
+    if (l1 > l2) {
+        paddingZeroes(&n2, l1 - l2);
+    } else if (l2 > l1) {
+        paddingZeroes(&n1, l2 - l1);
     }
 
-    if(answer.head->data == 0){
-        removeFromBeginning(&answer);
-    }
+    DllNode* t1 = n1.tail;
+    DllNode* t2 = n2.tail;
+    DllNode* d1 = n1.decimal;
+
+    subtractIntegers(&answer, &t1, &t2, d1);
+
+
     return answer;
 }
+
 
 void displayNumber(Number n){
     DllNode* temp = n.head;
