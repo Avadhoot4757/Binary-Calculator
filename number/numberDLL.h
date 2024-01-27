@@ -39,4 +39,8 @@ void paddingZeroes(Number* n, int count);
 
 Number subtract(Number n1, Number n2);
 
+Number singleMultiply(Number n, int num, int stuffingZero);
+
+Number multiply(Number n1, Number n2);
+
 void displayNumber(Number n);

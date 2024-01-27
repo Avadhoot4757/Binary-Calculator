@@ -5,13 +5,12 @@
 #include <stdlib.h>
 
 int main(){
-    char* string = "7184781148754548.84844741814 + 418787146.484848481481 - 484816464884.848484681 + 4145848484844418484.846844684 - 7745147.565684684846";
+    char* string = "82468442.4984498 * 498428999.8498846846";
     char* ans = infixToPostfix(string);
 
     Number answer;
     initNumber(&answer);
     answer = calculatePostfix(ans);
-
     displayNumber(answer);
 
     return 0;

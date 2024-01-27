@@ -488,6 +488,76 @@ Number subtract(Number n1, Number n2) {
     return answer;
 }
 
+Number singleMultiply(Number n, int num, int stuffingZero){
+    Number ans;
+    initNumber(&ans);
+    int product, carry = 0;
+
+    DllNode* t = n.tail;
+    while(t != NULL){
+        int mul = (t->data * num) + carry;
+        product = mul%10;
+        carry = mul/10;
+        insertAtBeginning(&ans, product);
+        t = t->prev;
+    }
+
+    while(carry != 0){
+        int temp = carry%10;
+        insertAtBeginning(&ans, temp);
+        carry = carry/10;
+    }
+    while(stuffingZero != 0){
+        append(&ans, 0);
+        stuffingZero--;
+    }
+
+    return ans;
+}
+
+Number multiply(Number n1, Number n2){
+    Number answer;
+
+    DllNode* t1 = n1.tail;
+    DllNode* t2 = n2.tail;
+    DllNode* d1 = n1.decimal;
+    DllNode* d2 = n2.decimal;
+
+    int l1 = findLength(d1, t1);
+    int l2 = findLength(d2, t2);
+
+    int num = t2->data;
+    int stuffingZero = 0;
+    answer = singleMultiply(n1, num, stuffingZero);
+    stuffingZero++;
+    t2 = t2->prev;
+
+    while(t2 != NULL){
+        num = (t2->data);
+        Number temp = singleMultiply(n1, num, stuffingZero);
+        stuffingZero++;
+        answer = add(answer, temp);
+        freeNumber(&temp);
+        t2 = t2->prev;
+    }
+
+    int decNo = l1 + l2;
+    if(decNo == 0){
+        return answer;
+    }
+    else{
+        DllNode* t = answer.tail;
+        while(decNo != 1){
+            t = t->prev;
+            decNo--;
+        }
+        answer.decimal = t;
+
+        return answer;
+    }
+    
+}
+
 
 void displayNumber(Number n){
     DllNode* temp = n.head;
