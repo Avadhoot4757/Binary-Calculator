@@ -1,4 +1,4 @@
-#include "../number/numberDLL.h"
+#include "../number/functions.h"
 
 typedef struct StackNode {
     Number data;

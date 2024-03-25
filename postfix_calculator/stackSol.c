@@ -63,7 +63,3 @@ void displaySol(StackSol stack) {
     }
     printf("\n");
 }
-
-// int main(){
-//     printf("hi");
-// }
