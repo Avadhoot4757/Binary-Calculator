@@ -7,7 +7,7 @@ Number add(Number n1, Number n2) {
     Number answer;
     initNumber(&answer);
 
-    int sum, carry = 0;
+    int carry = 0;
     DllNode *t1 = n1.tail;
     DllNode *t2 = n2.tail;
     DllNode *d1 = n1.decimal;
